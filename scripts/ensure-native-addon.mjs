@@ -37,4 +37,6 @@ if (!existsSync(addonPath)) {
     console.error("- A C++ compiler");
     process.exit(1);
   }
+
+  execSync("npm run build:ts", { stdio: "inherit", cwd: projectRoot });
 }

@@ -5,10 +5,6 @@
 node_modules/
 build/
 
-# TypeScript configuration files (source files are shipped for debugging)
-tsconfig.json
-rollup.config.mjs
-
 # Configuration files
 .gitignore
 .eslintrc.json
