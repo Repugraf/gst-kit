@@ -59,6 +59,7 @@ export type GStreamerPropertyReturnValue =
 
 export type GStreamerPropertyResult =
   | { type: "primitive"; value: GStreamerPropertyValue }
+  | { type: "bigint"; value: GStreamerPropertyValue }
   | { type: "array"; value: GStreamerPropertyValue[] }
   | { type: "object"; value: Record<string, GStreamerPropertyValue> }
   | { type: "buffer"; value: Buffer }

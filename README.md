@@ -657,6 +657,7 @@ if (result === null) {
 ### Property Types
 
 - **`primitive`**: Strings, numbers, booleans, enums
+- **`bigint`**: BigInts (typically uint64s used to store nanoseconds)
 - **`array`**: Arrays of values
 - **`object`**: GStreamer structures (like stats)
 - **`buffer`**: Raw binary data

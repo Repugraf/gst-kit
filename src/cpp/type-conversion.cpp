@@ -57,6 +57,19 @@ namespace TypeConversion {
         g_value_set_double(out_value, js_value.As<Napi::Number>().DoubleValue());
         return true;
       }
+      case G_TYPE_UINT64: {
+        if (js_value.IsNumber()) {
+          g_value_set_uint64(out_value, js_value.As<Napi::Number>().Uint32Value());
+          return true;
+        } else if (js_value.IsBigInt()) {
+          bool lossless;
+          g_value_set_uint64(out_value, js_value.As<Napi::BigInt>().Uint64Value(&lossless));
+          return true;
+        } else {
+          g_value_unset(out_value);
+          return false;
+        }
+      }
       default: {
         // Handle special GStreamer types
         if (target_type == gst_caps_get_type()) {
@@ -180,6 +193,8 @@ namespace TypeConversion {
       return Napi::Number::New(env, g_value_get_float(gvalue));
     } else if (g_value_type == G_TYPE_DOUBLE) {
       return Napi::Number::New(env, g_value_get_double(gvalue));
+    } else if (g_value_type == G_TYPE_UINT64) {
+      return Napi::BigInt::New(env, g_value_get_uint64(gvalue));
     } else if (GST_VALUE_HOLDS_ARRAY(gvalue)) {
       int size = gst_value_array_get_size(gvalue);
       Napi::Array array = Napi::Array::New(env, size);
@@ -304,6 +319,8 @@ namespace TypeConversion {
     // Determine the type and set both type and value
     if (js_value.IsString() || js_value.IsNumber() || js_value.IsBoolean()) {
       result.Set("type", Napi::String::New(env, "primitive"));
+    } else if (js_value.IsBigInt()) {
+      result.Set("type", Napi::String::New(env, "bigint"));
     } else if (js_value.IsArray()) {
       result.Set("type", Napi::String::New(env, "array"));
     } else if (js_value.IsBuffer()) {
